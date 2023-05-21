@@ -1,0 +1,40 @@
+spring:
+  main:
+    lazy-initialization: false
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost:3306}/${DB_NAME:situp}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: off
+  servlet:
+    multipart:
+      max-file-size: 7000MB
+      max-request-size: 7000MB
+
+server:
+  port: 8080
+
+app:
+  name: "situp"
+  version: "@project.version@"
+logging:
+  level:
+    com.situp.backend.backend: INFO
+
+jwt:
+  secret: ${JWT_SECRET:1jmhvPXhI40vqAnm}
+  token-duration: ${JWT_TOKEN_DURATION:600}                 # default: 10 min
+  issuer: situp
+
+cors:
+  allowed-origin: ${ALLOWED_ORIGINS:http://localhost:4200}
+
+
+javax:
+  persistence:
+    schema-generation:
+      scripts:
+        action: create
