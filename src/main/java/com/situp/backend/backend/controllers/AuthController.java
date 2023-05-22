@@ -45,6 +45,7 @@ public class AuthController {
         return new AuthLoginView(token, userView);
     }
 
+
     @PostMapping("/register")
     public AuthLoginView register(@RequestBody AuthRegisterDto body) {
         if (userRepository.existsByEmail(body.getEmail())) {
