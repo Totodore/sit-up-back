@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
@@ -15,11 +16,13 @@ public class Rating {
     @Id
     private long id;
 
-    private String ratedUserId;
-
-    private String authorUserId;
-
     private String ratingMessage;
 
     private int rating;
+
+    @ManyToOne
+    private User author;
+
+    @ManyToOne
+    private User ratedUser;
 }

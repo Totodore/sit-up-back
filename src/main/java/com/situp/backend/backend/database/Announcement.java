@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
@@ -16,8 +17,6 @@ public class Announcement {
     @GeneratedValue
     @Id
     private long id;
-
-    private String authorId;
 
     private String address;
 
@@ -38,5 +37,8 @@ public class Announcement {
     private int numberPeopleMax;
 
     private int numberOfRooms;
+
+    @ManyToOne
+    private User author;
 
 }

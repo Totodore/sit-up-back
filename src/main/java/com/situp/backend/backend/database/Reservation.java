@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
@@ -20,10 +21,11 @@ public class Reservation {
 
     private long announcementId;
 
-    private String authorId;
-
     private String message;
 
     @CreatedDate
     private Date date;
+
+    @ManyToOne
+    private User author;
 }

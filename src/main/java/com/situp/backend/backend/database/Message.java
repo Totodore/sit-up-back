@@ -2,10 +2,12 @@ package com.situp.backend.backend.database;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
@@ -17,10 +19,13 @@ public class Message {
     @Id
     private long id;
 
-    private String senderId;
+    @ManyToOne
+    private User sender;
 
-    private String receiverId;
+    @ManyToOne
+    private User receiver;
 
+    @CreatedDate
     private Date date;
     private String message;
 
