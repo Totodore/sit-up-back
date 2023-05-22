@@ -17,7 +17,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.email = ?1")
     Optional<User> findByEmail(String email);
 
-    @Query("UPDATE User u SET u.admin = NOT u.admin WHERE u.id = ?1")
     @Modifying
+    @Query("UPDATE User u SET u.admin = CASE u.admin " +
+            "WHEN TRUE THEN FALSE " +
+            "WHEN FALSE THEN TRUE " +
+            "ELSE u.admin " +
+            "END WHERE u.id = ?1")
     void toggleAdmin(Long id);
 }

@@ -12,5 +12,3 @@ public interface AnnouncementRepository extends CrudRepository<AnnouncementRepos
 
 
 }
-
-

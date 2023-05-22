@@ -19,12 +19,13 @@ public class Reservation {
     @Id
     private long id;
 
-    private long announcementId;
-
     private String message;
 
     @CreatedDate
     private Date date;
+
+    @ManyToOne
+    private Announcement announcement;
 
     @ManyToOne
     private User author;
