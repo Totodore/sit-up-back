@@ -23,7 +23,7 @@ public class MessageController {
 
     @GetMapping("latest")
     public Iterable<Message> getLatestMessages(@AuthenticationPrincipal TokenPayload token) {
-        return messageRepository.findAllByReceiverId(token.id());
+        return messageRepository.getLatestReceived(token.id());
     }
 
     @GetMapping("conversation/{id}")
