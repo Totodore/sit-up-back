@@ -6,6 +6,8 @@ import com.situp.backend.backend.database.User;
 import com.situp.backend.backend.dto.AddMessageDto;
 import com.situp.backend.backend.repositories.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,9 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
-import java.time.Duration;
-import java.time.LocalTime;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/message")
@@ -25,15 +27,15 @@ import java.time.LocalTime;
 public class MessageController {
 
     private final MessageRepository messageRepository;
+    private final Logger LOG = LoggerFactory.getLogger(MessageController.class);
+
+
+    private final HashMap<Long, FluxSink<ServerSentEvent<Message>>> streams = new HashMap<>();
 
     @GetMapping("subscribe")
-    public Flux<ServerSentEvent<String>> streamEvents() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(sequence -> ServerSentEvent.<String>builder()
-                        .id(String.valueOf(sequence))
-                        .event("periodic-event")
-                        .data("SSE - " + LocalTime.now().toString())
-                        .build());
+    public Flux<ServerSentEvent<Message>> streamEvents(@AuthenticationPrincipal TokenPayload token) {
+        LOG.info("user {} subscribed to messages", token.id());
+        return Flux.create(emitter -> streams.put(token.id(), emitter));
     }
 
     @GetMapping("latest")
@@ -59,6 +61,10 @@ public class MessageController {
         message.setReceiver(receiver);
 
         message.setMessage(body.getMessage());
+
+        LOG.info("user {} sent message to user {}", token.id(), body.getReceiverId());
+        streams.get(body.getReceiverId()).next(ServerSentEvent.builder(message).build());
+
         return messageRepository.save(message);
     }
 }
