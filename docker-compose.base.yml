@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  situp-front:
+    container_name: situp-front
+    image: ghcr.io/totodore/situp-front:latest
+    restart: always
+    ports:
+      - 4200:80
+
+  situp-back:
+    container_name: situp-back
+    image: ghcr.io/totodore/situp-back:latest
+    restart: always
+    ports:
+      - 8080:8080
+    env_file:
+      - app.env

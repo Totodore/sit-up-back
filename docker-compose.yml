@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+  situp-front:
+    container_name: situp-front
+    image: ghcr.io/totodore/situp-front:latest
+    restart: always
+    expose:
+      - 80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.situp-secure.rule=Host(`situp.dev.scriptis.fr`)"
+      - "traefik.http.routers.situp-secure.entrypoints=websecure"
+      - "traefik.http.routers.situp-secure.tls.certresolver=myhttpchallenge"
+      # https redirection
+      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.situp.rule=Host(`situp.dev.scriptis.fr`)"
+      - "traefik.http.routers.situp.entrypoints=web"
+      - "traefik.http.routers.situp.middlewares=redirect"
+      - "docker-ci.enable=true"
+
+  situp-back:
+    container_name: situp-back
+    image: ghcr.io/totodore/situp-back:latest
+    restart: always
+    expose:
+      - 8080
+    networks:
+      - traefik
+    env_file:
+      - app.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-situp-secure.rule=Host(`api-situp.dev.scriptis.fr`)"
+      - "traefik.http.routers.api-situp-secure.entrypoints=websecure"
+      - "traefik.http.routers.api-situp-secure.tls.certresolver=myhttpchallenge"
+      # https redirection
+      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.api-situp.rule=Host(`api-situp.dev.scriptis.fr`)"
+      - "traefik.http.routers.api-situp.entrypoints=web"
+      - "traefik.http.routers.api-situp.middlewares=redirect"
+      - "docker-ci.enable=true"
