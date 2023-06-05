@@ -24,4 +24,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
             "ELSE u.admin " +
             "END WHERE u.id = ?1")
     void toggleAdmin(Long id);
+
+    @Query("SELECT u FROM User u WHERE u.email LIKE %?1%")
+    Iterable<User> findAllByEmailContaining(String search);
 }
