@@ -20,6 +20,16 @@ public class Preferences {
     @ManyToOne
     private User user;
 
+    //Activity
+    private boolean petsitting;
+    private boolean plantsitting;
+    private boolean housesitting;
+
+    //Housing
+    private boolean house;
+    private boolean appartment;
+
+    //Animals
     private boolean cat;
     private boolean dog;
     private boolean frog;
@@ -30,6 +40,7 @@ public class Preferences {
     private boolean bird;
     private boolean hamster;
 
+    //City
     private boolean paris;
     private boolean marseille;
     private boolean lyon;
@@ -39,13 +50,7 @@ public class Preferences {
     private boolean montpellier;
     private boolean strasbourg;
 
-    private boolean petsitting;
-    private boolean plantsitting;
-    private boolean housesitting;
-
-    private boolean house;
-    private boolean appartment;
-
+    //Other
     private boolean children;
     private boolean otherPet;
     private boolean smoke;
