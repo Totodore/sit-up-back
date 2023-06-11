@@ -1,5 +1,6 @@
 package com.situp.backend.backend.dto;
 
+import com.situp.backend.backend.database.Preferences;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -7,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class AuthRegisterDto {
@@ -29,4 +31,6 @@ public class AuthRegisterDto {
     @NotEmpty
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date birthdate;
+
+    private List<Preferences> preferencesList;
 }
