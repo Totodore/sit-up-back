@@ -12,9 +12,11 @@ import java.sql.Blob;
 public class Image {
     @Id
     @GeneratedValue
-    private Long idImage;
+    private Long id;
+
     @Lob
     private Blob photo;
+
     @ManyToOne
     private Announcement announcement;
 

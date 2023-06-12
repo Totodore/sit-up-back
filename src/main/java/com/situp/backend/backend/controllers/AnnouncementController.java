@@ -1,22 +1,31 @@
 package com.situp.backend.backend.controllers;
 
+import com.situp.backend.backend.config.jwt.TokenPayload;
 import com.situp.backend.backend.database.Announcement;
+import com.situp.backend.backend.database.HouseLookupPreferences;
 import com.situp.backend.backend.database.User;
-import com.situp.backend.backend.dto.AuthLoginView;
-import com.situp.backend.backend.dto.AuthRegisterDto;
-import com.situp.backend.backend.dto.UserView;
-import com.situp.backend.backend.exceptions.HttpBadRequestException;
+import com.situp.backend.backend.dto.SearchAnnouncementDto;
 import com.situp.backend.backend.repositories.AnnouncementRepository;
 import com.situp.backend.backend.repositories.UserRepository;
+import com.situp.backend.backend.services.LocationFinderService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
+import javax.persistence.criteria.Predicate;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/announcement")
@@ -25,6 +34,9 @@ public class AnnouncementController {
     private final Logger LOG = LoggerFactory.getLogger(AnnouncementController.class);
 
     private final AnnouncementRepository announcementRepository;
+
+    private final LocationFinderService locationFinder;
+    private final UserRepository userRepository;
 
     @GetMapping("all")
     public Iterable<Announcement> getAllAnnouncement() {
@@ -40,17 +52,22 @@ public class AnnouncementController {
     }
 
     @PostMapping("/add/{id}")
-    public Announcement addAnnouncement(@PathVariable Long id) {
+    public Announcement addAnnouncement(@PathVariable Long id) throws IOException, InterruptedException {
 
+        String address = "88 rue de varenne";
+        String city = "Paris";
         Date debut = new Date();
         Date fin = new Date();
         LOG.info("creating announcement ");
+
+        var location = locationFinder.getLocation(address, city);
+
         User user = new User();
         Announcement announcement = new Announcement();
         announcement.setAuthor(user);
-        announcement.setAddress("88 rue de varenne");
-        announcement.setCity("Paris");
-        announcement.setPostalcode(75007);
+        announcement.setAddress(address);
+        announcement.setCity(city);
+        announcement.setPostalcode(Integer.parseInt(location.getPostcode()));
         announcement.setId(id);
         announcement.setDescription("rbvfvbgfvb");
         announcement.setNumberOfBeds(3);
@@ -59,24 +76,45 @@ public class AnnouncementController {
         announcement.setSquareMeters(50);
         announcement.setStartDate(debut);
         announcement.setStopDate(fin);
+        announcement.setX((int) location.getX());
+        announcement.setY((int) location.getY());
+
         return announcement;
     }
 
-    @GetMapping("/filter")
-    public Iterable<Announcement> filterAnnouncements(
-            @RequestParam(value = "city", required = false) String city,
-            @RequestParam(value = "postalcode", required = false) int postalcode,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "numberOfBeds", required = false) int numberOfBeds,
-            @RequestParam(value = "squareMeters", required = false) int squareMeters,
-            @RequestParam(value = "startDate", required = false) Date startDate,
-            @RequestParam(value = "stopDate", required = false) Date stopDate,
-            @RequestParam(value = "numberPeopleMax", required = false) int numberPeopleMax,
-            @RequestParam(value = "numberOfRooms", required = false) int numberOfRooms
-    ) {
-        return announcementRepository.findFilteredAnnouncements(
-                city, postalcode, description, numberOfBeds, squareMeters,
-                startDate, stopDate, numberPeopleMax, numberOfRooms
-        );
+    @GetMapping("/search")
+    public Iterable<Announcement> searchAnnouncements(@AuthenticationPrincipal TokenPayload token, @RequestBody SearchAnnouncementDto body) {
+        LOG.info("searching announcements");
+        var prefs = userRepository.findHouseLookupPreferencesByUserId(token.id());
+
+        return announcementRepository.findAll(getAnnouncementQuery(body, prefs));
+    }
+
+    private Specification<Announcement> getAnnouncementQuery(SearchAnnouncementDto dto, Optional<HouseLookupPreferences> prefs) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            // Coordonées
+            predicates.add(criteriaBuilder.greaterThan(root.get("x"), dto.getX() - dto.getRange()));
+            predicates.add(criteriaBuilder.lessThan(root.get("x"), dto.getX() + dto.getRange()));
+            predicates.add(criteriaBuilder.greaterThan(root.get("y"), dto.getY() - dto.getRange()));
+            predicates.add(criteriaBuilder.lessThan(root.get("y"), dto.getY() + dto.getRange()));
+
+            // Critères de recherches depuis les préférences de l'utilisateur
+            if (prefs.isPresent()) {
+                var pref = prefs.get();
+                if (pref.getWifi() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("wifi"), pref.getWifi()));
+                }
+            }
+
+            // Critères de recherches depuis le formulaire (SearchAnnouncementDto)
+            if (dto.getNumberOfBeds() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("numberOfBeds"), dto.getNumberOfBeds()));
+            }
+
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
     }
 }

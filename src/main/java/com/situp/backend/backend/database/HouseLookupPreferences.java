@@ -34,9 +34,9 @@ public class HouseLookupPreferences {
     private Set<Animal> refusedAnimals;
 
     //Other
-    private boolean allowedChildren;
-    private boolean allowedPets;
-    private boolean allowedSmoking;
-    private boolean wifi;
+    private Boolean allowedChildren;
+    private Boolean allowedPets;
+    private Boolean allowedSmoking;
+    private Boolean wifi;
 }
 
