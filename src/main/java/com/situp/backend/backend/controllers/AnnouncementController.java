@@ -55,8 +55,7 @@ public class AnnouncementController {
         announcement.setStartDate(body.getStartDate());
         announcement.setStopDate(body.getStopDate());
         announcementRepository.save(announcement);
-        //Preferences preference=new Preferences();
-        //preference.setPetsitting(body.getPet);
+
 
 
 
