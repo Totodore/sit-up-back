@@ -32,7 +32,7 @@ public class User {
 
 	private boolean admin;
 
-	@OneToMany
-	private List<Preferences> prefs;
+	//@OneToMany
+	//private List<Preferences> prefs;
 
 }

@@ -35,10 +35,8 @@ public class Announcement {
     private int numberPeopleMax;
 
     private int numberOfRooms;
-
     @ManyToOne
     private User author;
-    @OneToMany
-    private List<Image> image;
+
 
 }
