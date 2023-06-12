@@ -6,14 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/announcement")
 @RequiredArgsConstructor
 public class AnnouncementController {
 private final AnnouncementRepository announcementRepository;
     @GetMapping("/home")
     public Iterable<Announcement> getListAnnouncement(){
-        return announcementRepository.findAllAnnoucement();
+        return announcementRepository.findAll();
     }
 }
