@@ -45,57 +45,48 @@ public class AnnouncementDto {
 
     @NotEmpty
     private User author;
-
+    @NotEmpty
     private boolean cat;
-
+    @NotEmpty
     private boolean dog;
-
+    @NotEmpty
     private boolean frog;
-
+    @NotEmpty
     private boolean rabbit;
-
-    private boolean turtel;
-
+    @NotEmpty
+    private boolean turtle;
+    @NotEmpty
     private boolean fish;
-
+    @NotEmpty
     private boolean snake;
-
+    @NotEmpty
     private boolean bird;
-
+    @NotEmpty
     private boolean hamster;
 
-    private boolean paris;
-
-    private boolean marseille;
 
 
-    private boolean lyon;
-
-    private boolean toulouse;
-
-    private boolean nice;
-
-    private boolean nantes;
-
-    private boolean montpellier;
-
-    private boolean strasbourg;
-
+    @NotEmpty
     private boolean petsitting;
-
+    @NotEmpty
     private boolean plantsitting;
-
+    @NotEmpty
     private boolean housesitting;
-
+    @NotEmpty
     private boolean house;
+    @NotEmpty
+    private boolean appartement;
 
-    private boolean appartment;
 
+
+    @NotEmpty
     private boolean children;
-
+    @NotEmpty
     private boolean otherPet;
-
-    private boolean smoke;
+    @NotEmpty
+    private boolean smoking;
+    @NotEmpty
+    private boolean wifi;
 
 
 }

@@ -1,8 +1,6 @@
 package com.situp.backend.backend.controllers;
 
-import com.situp.backend.backend.database.Announcement;
-import com.situp.backend.backend.database.Preferences;
-import com.situp.backend.backend.database.User;
+import com.situp.backend.backend.database.*;
 import com.situp.backend.backend.dto.*;
 import com.situp.backend.backend.exceptions.HttpBadRequestException;
 import com.situp.backend.backend.repositories.AnnouncementRepository;
@@ -14,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/announcement")
@@ -54,6 +55,16 @@ public class AnnouncementController {
         announcement.setSquareMeters(body.getSquareMeters());
         announcement.setStartDate(body.getStartDate());
         announcement.setStopDate(body.getStopDate());
+        announcement.setAllowedChildren(body.isChildren());
+        announcement.setAllowedPets(body.isOtherPet());
+        announcement.setAllowedSmoking(body.isSmoking());
+        announcement.setWifi(body.isWifi());
+        Set<HouseActivity> setActivity = new HashSet(Arrays.asList( body.isPetsitting(), body.isPlantsitting(),body.isHousesitting()));
+        announcement.setActivities(setActivity);
+        //HousingType setHousing = body.isHouse();
+        //announcement.setHousingType(setHousing);
+        Set<Animal> setAnimal = new HashSet(Arrays.asList( body.isCat(), body.isDog(),body.isFrog(),body.isRabbit(),body.isTurtle(),body.isFish(),body.isSnake(),body.isBird(),body.isHamster()));
+        announcement.setRefusedAnimals(setAnimal);
         announcementRepository.save(announcement);
 
 
