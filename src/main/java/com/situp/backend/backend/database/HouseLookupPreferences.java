@@ -7,38 +7,20 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import java.util.Date;
+import javax.persistence.OneToOne;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Announcement {
+public class HouseLookupPreferences {
 
-    @GeneratedValue
     @Id
-    private long id;
+    @GeneratedValue
+    private Long id;
 
-    private String address;
-
-    private String city;
-
-    private int postalcode;
-
-    private String description;
-
-    private int numberOfBeds;
-
-    private int squareMeters;
-
-    private Date startDate;
-
-    private Date stopDate;
-
-    private int numberPeopleMax;
-
-    private int numberOfRooms;
+    @OneToOne
+    private User user;
 
     //Activity
     @ElementCollection
@@ -56,8 +38,5 @@ public class Announcement {
     private boolean allowedPets;
     private boolean allowedSmoking;
     private boolean wifi;
-
-    @ManyToOne
-    private User author;
-
 }
+
