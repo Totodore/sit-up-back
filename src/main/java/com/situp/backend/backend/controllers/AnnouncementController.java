@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/announcement")
@@ -58,12 +59,24 @@ public class AnnouncementController {
         announcement.setSquareMeters(50);
         announcement.setStartDate(debut);
         announcement.setStopDate(fin);
-
-
         return announcement;
-
-
     }
 
-
+    @GetMapping("/filter")
+    public Iterable<Announcement> filterAnnouncements(
+            @RequestParam(value = "city", required = false) String city,
+            @RequestParam(value = "postalcode", required = false) int postalcode,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "numberOfBeds", required = false) int numberOfBeds,
+            @RequestParam(value = "squareMeters", required = false) int squareMeters,
+            @RequestParam(value = "startDate", required = false) Date startDate,
+            @RequestParam(value = "stopDate", required = false) Date stopDate,
+            @RequestParam(value = "numberPeopleMax", required = false) int numberPeopleMax,
+            @RequestParam(value = "numberOfRooms", required = false) int numberOfRooms
+    ) {
+        return announcementRepository.findFilteredAnnouncements(
+                city, postalcode, description, numberOfBeds, squareMeters,
+                startDate, stopDate, numberPeopleMax, numberOfRooms
+        );
+    }
 }
