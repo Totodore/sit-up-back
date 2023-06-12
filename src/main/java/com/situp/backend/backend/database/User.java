@@ -33,6 +33,6 @@ public class User {
 	private boolean admin;
 
 	@OneToMany
-	private List<Preferences> prefs;
+	private List<HouseLookupPreference> prefs;
 
 }

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @Setter
-public class Preferences {
+public class HouseLookupPreference {
 
     @Id
     @GeneratedValue

@@ -1,6 +1,6 @@
 package com.situp.backend.backend.dto;
 
-import com.situp.backend.backend.database.Preferences;
+import com.situp.backend.backend.database.HouseLookupPreference;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -32,5 +32,5 @@ public class AuthRegisterDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date birthdate;
 
-    private List<Preferences> preferencesList;
+    private List<HouseLookupPreference> houseLookupPreferenceList;
 }
