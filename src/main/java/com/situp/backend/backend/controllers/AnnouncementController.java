@@ -1,10 +1,9 @@
 package com.situp.backend.backend.controllers;
 
 import com.situp.backend.backend.database.Announcement;
+import com.situp.backend.backend.database.Preferences;
 import com.situp.backend.backend.database.User;
-import com.situp.backend.backend.dto.AuthLoginView;
-import com.situp.backend.backend.dto.AuthRegisterDto;
-import com.situp.backend.backend.dto.UserView;
+import com.situp.backend.backend.dto.*;
 import com.situp.backend.backend.exceptions.HttpBadRequestException;
 import com.situp.backend.backend.repositories.AnnouncementRepository;
 import com.situp.backend.backend.repositories.UserRepository;
@@ -38,32 +37,32 @@ public class AnnouncementController {
         return announcementRepository.findById(id).get();
     }
 
-    @PostMapping("/add/{id}")
-    public Announcement addAnnouncement(@PathVariable Long id) {
+    @PostMapping("/add")
+    public void addAnnouncement(@RequestBody AnnouncementDto body ) {
 
-        Date debut = new Date();
-        Date fin = new Date();
-        LOG.info("creating announcement ");
-        User user = new User();
+
         Announcement announcement = new Announcement();
-        announcement.setAuthor(user);
-        announcement.setAddress("88 rue de varenne");
-        announcement.setCity("Paris");
-        announcement.setPostalcode(75007);
-        announcement.setId(id);
-        announcement.setDescription("rbvfvbgfvb");
-        announcement.setNumberOfBeds(3);
-        announcement.setNumberOfRooms(2);
-        announcement.setNumberPeopleMax(4);
-        announcement.setSquareMeters(50);
-        announcement.setStartDate(debut);
-        announcement.setStopDate(fin);
+        announcement.setAuthor(body.getAuthor());
+        announcement.setAddress(body.getAddress());
+        announcement.setCity(body.getCity());
+        announcement.setPostalcode(body.getPostalcode());
+
+        announcement.setDescription(body.getDescription());
+        announcement.setNumberOfBeds(body.getNumberOfBeds());
+        announcement.setNumberOfRooms(body.getNumberOfRooms());
+        announcement.setNumberPeopleMax(body.getNumberPeopleMax());
+        announcement.setSquareMeters(body.getSquareMeters());
+        announcement.setStartDate(body.getStartDate());
+        announcement.setStopDate(body.getStopDate());
+        announcementRepository.save(announcement);
+        //Preferences preference=new Preferences();
+        //preference.setPetsitting(body.getPet);
 
 
-        return announcement;
 
 
     }
+
 
 
 }
