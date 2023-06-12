@@ -8,4 +8,5 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Repository
 public interface AnnouncementRepository extends CrudRepository<Announcement, Long> {
+
 }

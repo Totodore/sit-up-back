@@ -7,7 +7,9 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,5 +31,8 @@ public class User {
 	private Date birthdate;
 
 	private boolean admin;
+
+	@OneToMany
+	private List<Preferences> prefs;
 
 }
