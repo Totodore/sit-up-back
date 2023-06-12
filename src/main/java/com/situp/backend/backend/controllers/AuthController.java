@@ -59,6 +59,7 @@ public class AuthController {
         user.setFirstname(body.getFirstname());
         user.setBirthdate(body.getBirthdate());
         user.setAdmin(false);
+        user.setPrefs(body.getPreferencesList());
 
         userRepository.save(user);
         String token = jwtTokenUtil.generateToken(user);
