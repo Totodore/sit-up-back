@@ -7,9 +7,8 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter
@@ -32,7 +31,6 @@ public class User {
 
 	private boolean admin;
 
-	@OneToMany
-	private List<Preferences> prefs;
-
+	@OneToOne
+	private HouseLookupPreferences prefs;
 }

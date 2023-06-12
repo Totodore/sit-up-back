@@ -45,6 +45,7 @@ public class AuthController {
         return new AuthLoginView(token, userView);
     }
 
+
     @PostMapping("/register")
     public AuthLoginView register(@RequestBody AuthRegisterDto body) {
         if (userRepository.existsByEmail(body.getEmail())) {
@@ -59,7 +60,6 @@ public class AuthController {
         user.setFirstname(body.getFirstname());
         user.setBirthdate(body.getBirthdate());
         user.setAdmin(false);
-        user.setPrefs(body.getPreferencesList());
 
         userRepository.save(user);
         String token = jwtTokenUtil.generateToken(user);

@@ -1,5 +1,6 @@
 package com.situp.backend.backend.repositories;
 
+import com.situp.backend.backend.database.HouseLookupPreferences;
 import com.situp.backend.backend.database.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.email LIKE %?1%")
     Iterable<User> findAllByEmailContaining(String search);
+
+    @Query("SELECT l FROM HouseLookupPreferences l WHERE l.user.id = ?1")
+    Optional<HouseLookupPreferences> findHouseLookupPreferencesByUserId(Long id);
 }
