@@ -69,7 +69,9 @@ public class MessageController {
         if (streams.containsKey(body.getReceiverId())) {
             streams.get(body.getReceiverId()).next(ServerSentEvent.builder(message).build());
         }
-        streams.get(token.id()).next(ServerSentEvent.builder(message).build());
+        if (streams.containsKey(token.id())) {
+            streams.get(token.id()).next(ServerSentEvent.builder(message).build());
+        }
         return message;
     }
 }
