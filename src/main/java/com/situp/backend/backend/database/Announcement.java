@@ -9,10 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -66,8 +63,5 @@ public class Announcement {
 
     @ManyToOne
     private User author;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Image> images;
 
 }

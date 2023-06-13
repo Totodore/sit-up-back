@@ -1,5 +1,6 @@
 package com.situp.backend.backend.services.locationresult;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LocationProperties {
     public String label;
     public double score;

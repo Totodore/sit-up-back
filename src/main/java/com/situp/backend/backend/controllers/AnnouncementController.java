@@ -1,14 +1,17 @@
 package com.situp.backend.backend.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.situp.backend.backend.config.jwt.TokenPayload;
 import com.situp.backend.backend.database.Announcement;
 import com.situp.backend.backend.database.HouseLookupPreferences;
 import com.situp.backend.backend.database.User;
+import com.situp.backend.backend.dto.AddAnnouncementDto;
 import com.situp.backend.backend.dto.SearchAnnouncementDto;
 import com.situp.backend.backend.repositories.AnnouncementRepository;
 import com.situp.backend.backend.repositories.UserRepository;
 import com.situp.backend.backend.services.LocationFinderService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,6 +40,7 @@ public class AnnouncementController {
 
     private final LocationFinderService locationFinder;
     private final UserRepository userRepository;
+    private final ModelMapper mapper;
 
     @GetMapping("all")
     public Iterable<Announcement> getAllAnnouncement() {
@@ -51,31 +55,16 @@ public class AnnouncementController {
         return announcementRepository.findById(id).get();
     }
 
-    @PostMapping("/add/{id}")
-    public Announcement addAnnouncement(@PathVariable Long id) throws IOException, InterruptedException {
+    @PostMapping("/add")
+    public Announcement addAnnouncement(@AuthenticationPrincipal TokenPayload token, @RequestBody AddAnnouncementDto body) throws IOException, InterruptedException {
 
-        String address = "88 rue de varenne";
-        String city = "Paris";
-        Date debut = new Date();
-        Date fin = new Date();
-        LOG.info("creating announcement ");
+        var location = locationFinder.getLocation(body.getAddress());
 
-        var location = locationFinder.getLocation(address, city);
-
-        User user = new User();
-        Announcement announcement = new Announcement();
+        User user = userRepository.findById(token.id()).get();
+        Announcement announcement = mapper.map(body, Announcement.class);
         announcement.setAuthor(user);
-        announcement.setAddress(address);
-        announcement.setCity(city);
         announcement.setPostalcode(Integer.parseInt(location.getPostcode()));
-        announcement.setId(id);
-        announcement.setDescription("rbvfvbgfvb");
-        announcement.setNumberOfBeds(3);
-        announcement.setNumberOfRooms(2);
-        announcement.setNumberPeopleMax(4);
-        announcement.setSquareMeters(50);
-        announcement.setStartDate(debut);
-        announcement.setStopDate(fin);
+        announcement.setCity(location.getCity());
         announcement.setX((int) location.getX());
         announcement.setY((int) location.getY());
 
@@ -94,7 +83,7 @@ public class AnnouncementController {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // Coordonées
+            // Coordonnées
             predicates.add(criteriaBuilder.greaterThan(root.get("x"), dto.getX() - dto.getRange()));
             predicates.add(criteriaBuilder.lessThan(root.get("x"), dto.getX() + dto.getRange()));
             predicates.add(criteriaBuilder.greaterThan(root.get("y"), dto.getY() - dto.getRange()));

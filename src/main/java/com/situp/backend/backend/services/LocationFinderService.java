@@ -17,13 +17,13 @@ import java.net.http.HttpResponse;
 public class LocationFinderService {
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
-    public LocationProperties getLocation(String address, String city) throws IOException, InterruptedException {
-        String API_URI = "https://api-adresse.data.gouv.fr/search?q=%s";
+    public LocationProperties getLocation(String address) throws IOException, InterruptedException {
+        String API_URI = "https://api-adresse.data.gouv.fr/search?q=%s&type=housenumber";
 
-        URI uri = URI.create(String.format(API_URI, address + " " + city));
+        URI uri = URI.create(String.format(API_URI, address));
 
         var response = httpClient.send(HttpRequest.newBuilder().GET().uri(uri).build(), HttpResponse.BodyHandlers.ofString());
         LocationResult result = new ObjectMapper().readValue(response.body(), LocationResult.class);
-        return result.getFeatures().get(0).locationProperties;
+        return result.getFeatures().get(0).getProperties();
     }
 }
