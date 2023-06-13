@@ -68,6 +68,8 @@ public class AnnouncementController {
         announcement.setX((int) location.getX());
         announcement.setY((int) location.getY());
 
+        announcementRepository.save(announcement);
+
         return announcement;
     }
 
