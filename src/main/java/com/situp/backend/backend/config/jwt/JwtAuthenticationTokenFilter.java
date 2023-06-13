@@ -29,7 +29,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         String token = request.getHeader("Authorization");
-        if (token == null && request.getQueryString().contains("token=")) {
+        if (token == null && request.getQueryString() != null && request.getQueryString().contains("token=")) {
             token = URLDecoder.decode(request.getQueryString().split("token=")[1].split("&")[0], StandardCharsets.UTF_8);
             LOG.info(token);
         }
