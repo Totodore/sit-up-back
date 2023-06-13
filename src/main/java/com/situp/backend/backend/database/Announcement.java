@@ -10,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,14 +48,14 @@ public class Announcement {
     private int numberOfRooms;
 
     //Activity
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<HouseActivity> activities;
 
     //Housing
     private HousingType housingType;
 
     //Animals
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Animal> refusedAnimals;
 
     //Other
@@ -65,7 +67,7 @@ public class Announcement {
     @ManyToOne
     private User author;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<Image> images;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Image> images;
 
 }

@@ -106,23 +106,23 @@ public class AnnouncementController {
                 if (pref.getWifi() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("wifi"), pref.getWifi()));
                 }
-                if (pref.getAllowedChildren() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("AllowedChildren"),pref.getAllowedChildren()));
+                if (pref.getAllowedChildren() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("AllowedChildren"), pref.getAllowedChildren()));
                 }
-                if (pref.getActivities() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("Activities"),pref.getActivities()));
+                if (pref.getActivities() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("Activities"), pref.getActivities()));
                 }
-                if (pref.getAllowedPets() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("AllowedPets"),pref.getAllowedPets()));
+                if (pref.getAllowedPets() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("AllowedPets"), pref.getAllowedPets()));
                 }
-                if (pref.getAllowedSmoking() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("AllowedSmoking"),pref.getAllowedSmoking()));
+                if (pref.getAllowedSmoking() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("AllowedSmoking"), pref.getAllowedSmoking()));
                 }
-                if (pref.getHousingType() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("HousingTypt"),pref.getHousingType()));
+                if (pref.getHousingType() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("HousingTypt"), pref.getHousingType()));
                 }
-                if (pref.getRefusedAnimals() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("RefusedAnymals"),pref.getRefusedAnimals()));
+                if (pref.getRefusedAnimals() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("RefusedAnymals"), pref.getRefusedAnimals()));
                 }
             }
 
@@ -130,20 +130,20 @@ public class AnnouncementController {
             if (dto.getNumberOfBeds() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("numberOfBeds"), dto.getNumberOfBeds()));
             }
-            if(dto.getNumberPeople() != null){
-                predicates.add(criteriaBuilder.equal(root.get("NumberPeople"),dto.getNumberPeople()));
+            if (dto.getNumberPeople() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("NumberPeople"), dto.getNumberPeople()));
             }
-            if(dto.getSquareMeters() != null){
-                predicates.add(criteriaBuilder.equal(root.get("SquareMeters"),dto.getSquareMeters()));
+            if (dto.getSquareMeters() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("SquareMeters"), dto.getSquareMeters()));
             }
-            if(dto.getStartDate() != null){
-                predicates.add(criteriaBuilder.equal(root.get("StartDate"),dto.getStartDate()));
+            if (dto.getStartDate() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("StartDate"), dto.getStartDate()));
             }
-            if(dto.getStopDate() != null){
-                predicates.add(criteriaBuilder.equal(root.get("StopDate"),dto.getStopDate()));
+            if (dto.getStopDate() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("StopDate"), dto.getStopDate()));
             }
-            if(dto.getNumberOfRooms() != null){
-                predicates.add(criteriaBuilder.equal(root.get("NumberOfRooms"),dto.getNumberOfRooms()));
+            if (dto.getNumberOfRooms() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("NumberOfRooms"), dto.getNumberOfRooms()));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
