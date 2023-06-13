@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageRepository extends CrudRepository<Message, Long> {
 
-    @Query(value = "SELECT m.* FROM Message m WHERE m.receiver_id = ?1 ORDER BY date DESC LIMIT 10", nativeQuery = true)
+    @Query(value = "SELECT * FROM message WHERE id IN (SELECT max(id) FROM message GROUP BY sender_id)", nativeQuery = true)
     Iterable<Message> getLatestReceived(Long id);
 
-    @Query("SELECT m FROM Message m WHERE m.receiver.id = ?1 AND m.sender.id = ?2 ORDER BY m.date DESC")
+    @Query("SELECT m FROM Message m WHERE (m.receiver.id = ?1 AND m.sender.id = ?2) OR (m.sender.id = ?1 AND m.receiver.id = ?2) ORDER BY m.date DESC")
     Iterable<Message> findAllByReceiverIdAndSenderId(Long receiverId, Long senderId);
 }

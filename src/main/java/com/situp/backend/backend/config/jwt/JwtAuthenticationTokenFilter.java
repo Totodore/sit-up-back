@@ -14,6 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
@@ -27,7 +29,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         String token = request.getHeader("Authorization");
-
+        if (token == null && request.getQueryString().contains("token=")) {
+            token = URLDecoder.decode(request.getQueryString().split("token=")[1].split("&")[0], StandardCharsets.UTF_8);
+            LOG.info(token);
+        }
         if (token != null) {
             DecodedJWT jwt;
             if (token.startsWith("Bearer ")) {
