@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Service
@@ -20,7 +22,7 @@ public class LocationFinderService {
     public LocationProperties getLocation(String address) throws IOException, InterruptedException {
         String API_URI = "https://api-adresse.data.gouv.fr/search?q=%s&type=housenumber";
 
-        URI uri = URI.create(String.format(API_URI, address));
+        URI uri = URI.create(String.format(API_URI, URLEncoder.encode(address, StandardCharsets.UTF_8)));
 
         var response = httpClient.send(HttpRequest.newBuilder().GET().uri(uri).build(), HttpResponse.BodyHandlers.ofString());
         LocationResult result = new ObjectMapper().readValue(response.body(), LocationResult.class);
