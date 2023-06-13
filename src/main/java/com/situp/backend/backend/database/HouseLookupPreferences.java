@@ -3,8 +3,10 @@ package com.situp.backend.backend.database;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -23,20 +25,20 @@ public class HouseLookupPreferences {
     private User user;
 
     //Activity
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<HouseActivity> activities;
 
     //Housing
     private HousingType housingType;
 
     //Animals
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Animal> refusedAnimals;
 
     //Other
-    private Boolean allowedChildren;
-    private Boolean allowedPets;
-    private Boolean allowedSmoking;
-    private Boolean wifi;
+    private Boolean allowedChildren = true;
+    private Boolean allowedPets = false;
+    private Boolean allowedSmoking = false;
+    private Boolean wifi = true;
 }
 
